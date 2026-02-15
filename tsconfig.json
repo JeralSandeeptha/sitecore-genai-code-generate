@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler / module settings */
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "moduleDetection": "force",
+    "noEmit": false,
+    "outDir": "dist",
+
+    /* Linting / strictness */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "exclude": [
+    "node_modules"
+  ]
+}

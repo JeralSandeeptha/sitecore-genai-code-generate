@@ -1,0 +1,7 @@
+node_modules
+dist
+.env*
+.dockerignore
+Dockerfile.dev
+docker_volumes
+docker

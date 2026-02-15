@@ -1,0 +1,21 @@
+services:
+  sitecore-genai-code-generator:
+    container_name: sitecore_genai_code_generator
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5004:5004"
+    environment:
+      - PORT=5004
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - BASE_URL=http://localhost:5173
+      - KNOWLEDGE_API_URL=http://knowledge-service:5003
+      - GATEWAY_SERVICE_URL=http://gateway-service:5000
+      - V0_API_KEY=${V0_API_KEY}
+    volumes:
+      - .:/app
+      - /app/node_modules
