@@ -1,4 +1,5 @@
 import './config/envConfig';
+import './config/dbConfig';
 import express, { Application } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';

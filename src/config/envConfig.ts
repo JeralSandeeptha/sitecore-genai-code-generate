@@ -11,5 +11,7 @@ export const envConfig = {
     V0_API_KEY: process.env.V0_API_KEY,
     KNOWLEDGE_API_URL: process.env.KNOWLEDGE_API_URL,
     GATEWAY_SERVICE_URL: process.env.GATEWAY_SERVICE_URL,
-    RABBITMQ_SERVICE_URL: process.env.RABBITMQ_SERVICE_URL
+    USER_SERVICE_URL: process.env.USER_SERVICE_URL,
+    RABBITMQ_SERVICE_URL: process.env.RABBITMQ_SERVICE_URL,
+    DATABASE_URL: process.env.DATABASE_URL
 }

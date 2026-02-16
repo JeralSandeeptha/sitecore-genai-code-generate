@@ -53,6 +53,18 @@ export const consumeQueue = async (queue: string): Promise<void> => {
         `Set V0 API key dynamically for chat creation: ${data?.voApiKey}`,
       );
 
+      // Change task status into inprogress
+      try {
+        await axios.patch(
+          `${envConfig.USER_SERVICE_URL}/api/v1/task/${data?.taskId}`,
+          { status: 'in_progress' }
+        );
+        logger.info('Task updated');
+      } catch (error) {
+        logger.error('Failed to update task');
+        logger.error(error);
+      }
+
       // Get embeddings related to user prompt
       const response = await axios.get(
         `${envConfig.KNOWLEDGE_API_URL}/api/v1/search?query=${encodeURIComponent(data?.prompt)}`,
@@ -144,6 +156,17 @@ export const consumeQueue = async (queue: string): Promise<void> => {
       }
       
       const result = await v0.chats.create(chatPayload);
+
+      // Change task status into completed
+      try {
+        await axios.patch(
+          `${envConfig.USER_SERVICE_URL}/api/v1/task/${data?.taskId}`,
+          { status: 'completed' }
+        );
+        logger.info('Task updated');
+      } catch (error) {
+        logger.error('Failed to update task');
+      }
 
       logger.info("Component generate query was success");
       logger.info(result);
