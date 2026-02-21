@@ -1,0 +1,68 @@
+name: Build & Push Code Generate Service Artifact to Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clean Workspace
+      - name: Clean workspace
+        run: |
+          echo "========Executing Clean Workspace========"
+          rm -rf *
+
+      # Checkout SCM
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      # Verify Tools
+      - name: Verify tools
+        run: |
+          echo "========Verify Tools========"
+          node --version
+          npm --version
+          git --version
+
+      # Verify Branch
+      - name: Verify branch
+        run: |
+          git branch -a
+          git log -1 --oneline
+
+      # Install Dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Set branch-specific repo name
+      - name: Set repo name
+        id: set-repo
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          BRANCH_NAME=$(echo $BRANCH_NAME | sed 's/\//-/g')
+          REPO_NAME="sitecore-genai-code-generate-${BRANCH_NAME}"
+          echo "repo_name=$REPO_NAME" >> $GITHUB_OUTPUT
+          echo "Using repository: $REPO_NAME"
+
+      # Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t jeralsandeeptha/${{ steps.set-repo.outputs.repo_name }}:${{ github.sha }} .
+
+      # Push Docker Image
+      - name: Push Docker Image
+        run: |
+          docker push jeralsandeeptha/${{ steps.set-repo.outputs.repo_name }}:${{ github.sha }}
